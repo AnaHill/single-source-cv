@@ -1,0 +1,19 @@
+description: INTERNAL ONLY - projects CV with real client names and internal items (do not publish)
+lang: en
+# Renders `internal: true` items and `*_internal` fields. If your data has
+# real internal information, keep your repository private.
+include_internal: true
+
+layout:
+  mode: single
+  main: [header, contact, summary, experience, projects, skills, education, certifications]
+
+filters:
+  experience:
+    exclude_tags: [academia]
+  education:
+    include_tags: [degree]
+
+style:
+  accent: "#8a1c1c"
+  show_updated: true

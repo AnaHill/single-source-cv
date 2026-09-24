@@ -1,0 +1,62 @@
+# UI strings for the PDF template (section headings etc.) and date words, per language.
+#
+# The top-level keys ARE the supported languages. The first one is the default
+# language and the fallback when a text in data/*.yml has no translation.
+#
+# To add a language (e.g. Swedish): copy a block below, rename it `sv:` and
+# translate the values. Then use `{en: ..., sv: ...}` in data/*.yml.
+#
+# Optional date keys:
+#   present      - word for an ongoing period (`end: present`)
+#   months       - short month names; used for dates on the website ("Feb 2026").
+#                  Without it, dates are numeric ("2026/02").
+#   months_long  - long month names for the footer ("Updated September 2026").
+#                  Without it, the footer date is numeric ("9/2026").
+en:
+  about: About Me
+  contact: Contact
+  phone: Phone
+  email: Email
+  location: Location
+  references: "**References** available on request"
+  skills: Expertise & Skills
+  languages: Languages
+  certifications: Certifications
+  certifications_more: More information in
+  experience: Experience
+  projects: Projects
+  education: Education
+  merits: Merits & Hobbies
+  hobbies: Hobbies
+  trainings: Trainings
+  role: Role
+  industry: Industry
+  data: Data
+  stack: Tech stack
+  present: Present
+  updated: Updated
+  months: [Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
+  months_long: [January, February, March, April, May, June, July, August, September, October, November, December]
+fi:
+  about: Tietoa minusta
+  contact: Yhteystiedot
+  phone: Puhelin
+  email: Sähköposti
+  location: Sijainti
+  references: "**Suosittelijat** pyydettäessä"
+  skills: Osaaminen
+  languages: Kielitaito
+  certifications: Sertifikaatit
+  certifications_more: Lisätietoja
+  experience: Työkokemus
+  projects: Projektit
+  education: Koulutus
+  merits: Ansiot ja harrastukset
+  hobbies: Harrastukset
+  trainings: Koulutukset
+  role: Rooli
+  industry: Toimiala
+  data: Data
+  stack: Teknologiat
+  present: nyt
+  updated: Päivitetty

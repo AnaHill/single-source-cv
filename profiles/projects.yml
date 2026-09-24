@@ -1,0 +1,19 @@
+description: Project-focused CV with all public projects (base for tenders / company CV systems)
+lang: en
+# Set true for internal use: renders `internal: true` items and `*_internal` fields
+# (e.g. client_internal: real customer name instead of "Private Company (NDA)").
+# See profiles/internal.yml.
+include_internal: false
+
+layout:
+  sidebar: [photo, contact, skills, languages, certifications]
+  main: [header, summary, experience, projects, education]
+
+filters:
+  experience:
+    exclude_tags: [academia]
+  education:
+    include_tags: [degree]
+
+style:
+  accent: "#1d4f91"

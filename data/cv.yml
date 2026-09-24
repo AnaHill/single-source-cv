@@ -1,0 +1,315 @@
+# =====================================================================
+# CV — single source of truth (EXAMPLE DATA: Matti Meikäläinen is fictional)
+# ---------------------------------------------------------------------
+# Replace everything below with your own content. Conventions
+# (see AGENTS.md for the full description):
+#   - Any text value is either a plain string (same in every language)
+#     or a mapping {en: ..., fi: ...}. A missing translation falls back to
+#     the default language (first key in templates/labels.yml) and the
+#     build prints a warning.
+#   - Channel-specific variants: `field_web` / `field_pdf` override `field`
+#     for that output channel.
+#   - `channels: [web]` or `channels: [pdf]` limits a list item to one channel
+#     (default: all channels).
+#   - `internal: true` marks an item (or use `field_internal`) that is only
+#     rendered when the profile has `include_internal: true`.
+#   - `tags:` are used by PDF profiles to filter list items.
+#   - Dates: `start` / `end` as "YYYY-MM" or "YYYY"; `end: present`.
+#     `period:` overrides the formatted date range; `date:` -> `date_fmt`.
+#   - Inline markdown (**bold**, *italic*, [text](url)) works in text fields
+#     and is converted for the PDF automatically.
+# =====================================================================
+
+basics:
+  name: Matti Meikäläinen
+  headline:
+    en: Senior Data Engineer, M.Sc. (Tech.)
+    fi: Senior Data Engineer, DI
+  # photo: assets/photo.jpg      # square image; without it the PDF shows initials
+  email: matti.meikalainen@example.com
+  phone: "+358 999 123 4567000"
+  location:
+    en: Helsinki, Finland
+    fi: Helsinki
+  links:                          # `label` is also used by the `header_links` style option
+    - label: LinkedIn
+      text: Matti Meikäläinen
+      url: https://www.example.com/linkedin/matti-meikalainen
+    - label: GitHub
+      text: matti-example
+      url: https://www.example.com/github/matti-example
+    - label:
+        en: Portfolio
+        fi: Portfolio
+      text:
+        en: example.com/matti
+        fi: example.com/matti
+      url: https://www.example.com/matti
+  web:
+    credly_url: https://www.example.com/credly/matti   # shown under Certifications (optional)
+
+# Website and PDF say the same thing in a different tone (emojis only on the web)
+summary_web: >-
+  Data engineer 🛠️ who likes turning messy source systems into reliable data products.
+  Currently building cloud data platforms as a **Senior Data Engineer at Example Data Oy** with **Azure**, **Databricks**, **Python**, and **SQL**.
+summary_pdf:
+  en: >-
+    Data engineer who likes turning messy source systems into reliable data products.
+    Currently building cloud data platforms as a Senior Data Engineer at Example Data Oy.
+    Main tools are **Azure**, **Databricks** (PySpark), **Python**, and **SQL**.
+  fi: >-
+    Data engineer, joka tykkää muuttaa sotkuiset lähdejärjestelmät luotettaviksi datatuotteiksi.
+    Rakennan pilvidata-alustoja Senior Data Engineerinä Example Data Oy:ssä.
+    Päätyökaluni ovat **Azure**, **Databricks** (PySpark), **Python** ja **SQL**.
+
+# ---------------------------------------------------------------------
+# Skills
+# ---------------------------------------------------------------------
+skills:
+  # OPTIONAL bubble chart (section `skills_chart` in a profile layout, and the
+  # web template). Bubbles are placed BY HAND: x, y = centre on a 0-100 grid,
+  # r = radius in px of a 620 px wide chart, cat = index into `categories`.
+  # Nothing prevents overlap, so check the PNG preview after edits. If you do
+  # not want a chart, delete this `chart:` block and `skills_chart` from profiles.
+  chart:
+    categories:
+      - { label: { en: Core stack, fi: Ydinosaaminen },  bg: "rgba(29,79,145,0.85)",  border: "#1d4f91" }
+      - { label: { en: Soft skills, fi: Pehmeät taidot }, bg: "rgba(60,60,60,0.82)",   border: "#3c3c3c" }
+      - { label: { en: Also used, fi: Myös käytössä },   bg: "rgba(160,160,160,0.82)", border: "#999" }
+    items:
+      - { label: "Azure",      x: 22, y: 68, r: 46, cat: 0 }
+      - { label: "Databricks", x: 52, y: 76, r: 46, cat: 0 }
+      - { label: { en: "Data\nmodeling", fi: "Data-\nmallinnus" }, x: 38, y: 36, r: 42, cat: 0 }
+      - { label: "Python\n& SQL", x: 74, y: 50, r: 42, cat: 0 }
+      - { label: { en: "Communi-\ncation", fi: "Viestintä" }, x: 12, y: 26, r: 32, cat: 1 }
+      - { label: { en: "Mentoring", fi: "Mentorointi" },     x: 60, y: 18, r: 32, cat: 1 }
+      - { label: "dbt",       x: 86, y: 82, r: 22, cat: 2 }
+      - { label: "Airflow",   x: 90, y: 24, r: 22, cat: 2 }
+      - { label: "Docker",    x:  4, y: 56, r: 20, cat: 2 }
+
+  # Grouped list (PDF "Expertise & Skills"); inline: true -> one comma-separated bullet
+  groups:
+    - name:
+        en: Data engineering
+        fi: Data engineering
+      inline: true
+      items: [Azure, Data Factory, Databricks, PySpark, Python, SQL, dbt, Airflow, PostgreSQL, Docker, git, Azure DevOps]
+    - name:
+        en: Analytics
+        fi: Analytiikka
+      items: [Power BI, pandas & Jupyter]
+    - name:
+        en: Other
+        fi: Muut
+      items:
+        - Terraform, Bash, PowerShell
+        - en: agile methods, workshop facilitation
+          fi: ketterät menetelmät, työpajojen fasilitointi
+
+# ---------------------------------------------------------------------
+# Work experience (newest first)
+#   highlights: bullet list (website), summary: paragraph (PDF)
+# ---------------------------------------------------------------------
+experience:
+  - id: example-data-sde
+    title: Senior Data Engineer
+    org: Example Data Oy
+    org_url: https://www.example.com/
+    start: 2024-01
+    end: present
+    tags: [data-engineering, lead]
+    highlights:
+      - Designing and building **cloud data platforms** for customers in industry and retail; see [Projects](#projects)
+      - Mentoring junior engineers and running the company's internal Databricks study group
+    summary:
+      en: Designing and building cloud data platforms for industrial and retail customers on Azure and Databricks. Cut a customer's nightly batch runtime from five hours to 40 minutes, and mentor three junior engineers.
+      fi: Suunnittelen ja rakennan pilvidata-alustoja teollisuuden ja kaupan asiakkaille Azuressa ja Databricksissä. Lyhensin asiakkaan yöajon viidestä tunnista 40 minuuttiin, ja mentoroin kolmea junioria.
+
+  - id: sample-analytics-de
+    title: Data Engineer
+    org: Sample Analytics Oy
+    start: 2020-03
+    end: 2023-12
+    tags: [data-engineering]
+    highlights:
+      - Built and maintained ELT pipelines (**Azure Data Factory**, **PostgreSQL**, **Python**) for public sector and energy customers
+      - Introduced automated data quality tests that caught issues before they reached reports
+    summary:
+      en: Built and maintained ELT pipelines for public sector and energy customers with Azure Data Factory, PostgreSQL, and Python. Introduced automated data quality tests that caught issues before they reached reports.
+      fi: Rakensin ja ylläpidin ELT-putkia julkisen sektorin ja energia-alan asiakkaille (Azure Data Factory, PostgreSQL, Python). Toin käyttöön automaattiset datan laatutestit, jotka löysivät virheet ennen raportteja.
+
+  - id: university-ra
+    title:
+      en: Research Assistant
+      fi: Tutkimusavustaja
+    org:
+      en: Example University of Technology
+      fi: Esimerkin teknillinen yliopisto
+    start: 2017-09
+    end: 2020-02
+    tags: [academia]
+    highlights:
+      - Analysed sensor data from industrial processes with **Python** and **MATLAB**
+    summary:
+      en: Analysed sensor data from industrial processes with Python and MATLAB, and co-authored two conference papers.
+      fi: Analysoin teollisten prosessien anturidataa Pythonilla ja MATLABilla, ja olin mukana kirjoittamassa kahta konferenssijulkaisua.
+
+# ---------------------------------------------------------------------
+# Projects (newest first). Project texts are English-only on purpose here:
+# plain strings are used as-is in every language.
+# ---------------------------------------------------------------------
+projects:
+  - id: industrial-lakehouse
+    title: Lakehouse Data Platform
+    client: Private Company, Finland (NDA)
+    client_internal: Teollisuus Esimerkki Oy      # real name, only in include_internal profiles
+    start: 2024-06
+    end: present
+    role: Lead Data Engineer
+    industry: Manufacturing
+    data: Operational & Analytical
+    tags: [data-engineering, data-platform, databricks, lead]
+    highlights:
+      - Designed a **medallion-architecture lakehouse** on Databricks for production and quality data
+      - Consolidated a dozen ad-hoc pipelines into one monitored, tested orchestration flow
+      - Cut the nightly batch runtime from five hours to 40 minutes
+    stack: [Databricks, PySpark, Delta Lake, Azure Data Factory, Azure DevOps]
+
+  - id: internal-bid-support
+    internal: true                                # whole item only in include_internal profiles
+    title: Tender Support
+    client: Example Data Oy (internal)
+    start: 2024-09
+    end: 2024-10
+    role: Technical Expert
+    tags: [presales]
+    highlights:
+      - Wrote the technical solution description for a public sector data platform tender
+    stack: [Azure, Databricks]
+
+  - id: retail-analytics
+    title: Retail Analytics Pipelines
+    client: Finnish retail chain (NDA)
+    start: 2024-01
+    end: 2024-05
+    role: Data Engineer
+    industry: Retail
+    data: Analytical
+    tags: [data-engineering, azure]
+    highlights:
+      - Built daily sales and inventory pipelines feeding the customer's **Power BI** reporting
+    stack: [Azure Data Factory, Azure SQL, Python, Power BI]
+
+  - id: energy-dq
+    title: Data Quality Framework
+    client: Energy company, Finland (NDA)
+    start: 2022-02
+    end: 2023-06
+    role: Data Engineer
+    industry: Energy
+    data: Operational
+    tags: [data-engineering, data-quality]
+    highlights:
+      - Implemented automated data quality checks for **time-series** metering data
+      - Reduced manual data fixes in monthly reporting by about 80 %
+    stack: [PostgreSQL, Python, Great Expectations, Azure DevOps]
+
+  - id: public-sector-reporting
+    title: Reporting Modernisation
+    client: Public sector organisation in Finland
+    client_web: Public sector organisation in Finland 🇫🇮   # emoji only on the website
+    start: 2020-06
+    end: 2021-12
+    role: Data Engineer
+    industry: Public Sector
+    data: Analytical
+    tags: [data-engineering, azure]
+    highlights:
+      - Migrated legacy SQL Server reports to an Azure-based data warehouse
+    stack: [Azure Data Factory, Azure SQL, Power BI]
+
+# ---------------------------------------------------------------------
+# Education
+# ---------------------------------------------------------------------
+education:
+  - id: msc
+    date: 2019-12
+    degree:
+      en: Master of Science (Technology)
+      fi: Diplomi-insinööri
+    degree_short: M.Sc. (Tech.)
+    school:
+      en: Example University of Technology
+      fi: Esimerkin teknillinen yliopisto
+    place:
+      en: Helsinki, Finland
+      fi: Helsinki
+    details:
+      en: "Major: Data Science"
+      fi: "Pääaine: datatiede"
+    tags: [degree]
+  - id: bsc
+    date: 2017-06
+    degree:
+      en: Bachelor of Science (Technology)
+      fi: Tekniikan kandidaatti
+    degree_short: B.Sc. (Tech.)
+    school:
+      en: Example University of Technology
+      fi: Esimerkin teknillinen yliopisto
+    tags: [degree]
+  - id: exchange
+    channels: [pdf]                               # only in the PDF
+    period: 2016-2017
+    degree:
+      en: Student exchange
+      fi: Opiskelijavaihto
+    school: University of Example, Germany
+
+languages:
+  - name: { en: Finnish, fi: Suomi }
+    level: { en: Mother tongue, fi: Äidinkieli }
+  - name: { en: English, fi: Englanti }
+    level: { en: Fluent (C1), fi: Sujuva (C1) }
+  - name: { en: Swedish, fi: Ruotsi }
+    level: { en: Basic (A2), fi: Perustaso (A2) }
+
+# ---------------------------------------------------------------------
+# Certifications (newest first)
+# ---------------------------------------------------------------------
+certifications:
+  - { date: 2025-03, issuer: Databricks, name: Databricks Certified Data Engineer Associate }
+  - { date: 2023-10, issuer: Azure,      name: Azure Data Fundamentals (DP-900) }
+  - { date: 2023-09, issuer: Azure,      name: Azure Fundamentals (AZ-900), note: { en: renewed 2025, fi: uusittu 2025 } }
+  - { date: 2022-05, issuer: Scrum,      name: Professional Scrum Master I (PSM I) }
+
+# ---------------------------------------------------------------------
+# Awards and other merits (PDF "Merits & Hobbies"); awards are rendered first
+# ---------------------------------------------------------------------
+awards:
+  - title: Colleague of the Year
+    title_pdf: { en: Example Data Colleague of the Year, fi: Example Datan Vuoden kollega }
+    org: Example Data Oy
+    year: 2025
+    description: Chosen by colleagues for **always sharing knowledge** — for example by running the internal Databricks study group.
+    description_pdf:
+      en: For always sharing knowledge with colleagues
+      fi: Osaamisen aktiivisesta jakamisesta kollegoille
+
+merits:
+  - title: { en: Speaker, fi: Puhuja }
+    text: { en: "Example Data Meetup 2024: *Testing data pipelines*", fi: "Example Data Meetup 2024: *Datalinjastojen testaus*" }
+
+hobbies:
+  en: Orienteering, board games, cooking
+  fi: Suunnistus, lautapelit, ruoanlaitto
+
+# ---------------------------------------------------------------------
+# Trainings (newest first)
+# ---------------------------------------------------------------------
+trainings:
+  - title: Data Architecture Programme
+    org: Example Data Oy
+    start: 2025-01
+    end: 2025-06
+    description: A six-month internal programme on architecture practices, stakeholder work, and cost-aware cloud design.

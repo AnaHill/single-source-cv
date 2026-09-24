@@ -1,0 +1,25 @@
+description: One-column, ATS-friendly CV (plain layout, no photo or chart) for job applications
+lang: en
+include_internal: false
+
+# mode: single -> one full-width column, only `main` is rendered (no sidebar)
+layout:
+  mode: single
+  main: [header, contact, summary, skills, experience, projects, education, certifications, languages]
+
+filters:
+  projects:
+    ids: [industrial-lakehouse, energy-dq, retail-analytics]
+  education:
+    include_tags: [degree]
+
+# Conventional headings that applicant tracking systems recognise
+labels:
+  en: { about: Summary, skills: Skills, projects: Key Projects }
+  fi: { about: Profiili, projects: Keskeiset projektit }
+
+style:
+  accent: "#1d4f91"
+  font_size: 9.5
+  heading_size: 12
+  header_links: [LinkedIn, GitHub]   # which basics.links (by label) go under the name

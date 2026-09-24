@@ -1,0 +1,25 @@
+description: Full CV with sidebar (photo, contact, skills), key projects, skills chart and merits
+lang: en
+include_internal: false
+# Optional: also write the default-language PDF as out/<name>, e.g. the file
+# name used on your website. A mapping sets it per language: {en: a.pdf, fi: b.pdf}
+publish_as: resume.pdf
+
+# layout.mode: sidebar (default) or single. Section order per column. Available sections:
+#   photo, header, summary, contact, skills, skills_chart, experience,
+#   projects, education, languages, certifications, merits, trainings
+layout:
+  sidebar: [photo, contact, skills, languages, certifications]
+  main: [header, summary, experience, skills_chart, projects, education, merits, trainings]
+
+# Filters for top-level lists: include_tags, exclude_tags, ids (explicit selection + order), max
+filters:
+  projects:
+    ids: [industrial-lakehouse, energy-dq, retail-analytics]
+
+# Optional style overrides (defaults at the top of templates/cv.typ):
+#   accent, ink, font, font_size, heading_size, sidebar_width (%), photo_size (cm),
+#   justify, chart_scale, show_references, show_updated, show_page_numbers
+style:
+  accent: "#1d4f91"
+  chart_scale: 0.8

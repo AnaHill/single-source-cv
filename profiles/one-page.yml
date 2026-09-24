@@ -1,0 +1,19 @@
+description: Compact 1-page CV with sidebar (industry experience + degrees only)
+lang: en
+include_internal: false
+
+layout:
+  sidebar: [photo, contact, skills, certifications]
+  main: [header, summary, experience, education, languages]
+
+filters:
+  experience:
+    exclude_tags: [academia]
+  education:
+    include_tags: [degree]
+
+style:
+  accent: "#1d4f91"
+  font_size: 9
+  heading_size: 14
+  photo_size: 4.6

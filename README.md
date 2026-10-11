@@ -7,6 +7,7 @@ Keep your whole CV in one place (`data/cv.yml`) and generate from it:
 - **Website markdown** (`out/cv.md`) for GitHub Pages / Jekyll or any static site. Liquid tags pass through untouched.
 - **PDF CVs** via [Typst](https://typst.app/), one per **profile** × **language**: a full CV, a one-page CV, a plain one-column **ATS-friendly** CV, a project-focused CV for tenders …
 - An **internal** variant with real client names for company CV systems, while the public outputs say "Private Company (NDA)".
+- A **job fit analysis** with your coding agent: drop a job ad into `jobs/<slug>/`, get a requirement-by-requirement match against your CV with gaps and suggestions, and optionally a CV tailored to that job.
 
 The same entry can say things differently per channel (emojis on the web, a tighter paragraph in the PDF), and profiles pick sections, order, filters, and style. The example data is a fictional *Matti Meikäläinen*.
 
@@ -22,7 +23,8 @@ Requires Python 3.10+. Typst comes from the `typst` pip package, so no separate 
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate            # Windows PowerShell: .venv\Scripts\Activate.ps1  |  Git Bash: source .venv/Scripts/activate
+source .venv/bin/activate # Git Bash
+# Windows PowerShell: .venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 
 python build.py md                   # -> out/cv.md (default language)
@@ -33,6 +35,22 @@ python build.py list                 # profiles and what they are for
 ```
 
 `--png` writes page previews `out/preview_*.png`. Look at them after every layout change (page count, overflow, sidebar spilling to the next page).
+
+## Job fit analysis and tailored CVs
+
+```
+jobs/acme-senior-data-engineer/
+  ad.pdf          ← you: the job ad in any format (PDF, markdown, HTML, text)
+  fit.md          ← agent: how well your CV matches, gaps, missing keywords, suggestions, questions
+  profile.yml     ← agent, on request: a CV profile tailored to this job
+```
+
+1. Save the ad as `jobs/<slug>/ad.pdf` (or `.md`, `.html`, `.txt`), or just paste it into the chat.
+2. In [Claude Code](https://claude.com/claude-code) run `/job-fit jobs/<slug>`. Other coding agents: "analyse jobs/<slug> as described in AGENTS.md". The instructions live in `.claude/skills/job-fit/SKILL.md`, so no API key or extra dependency is needed.
+3. Read `fit.md`. Every requirement gets ✅ met / 🟡 partial / ❌ missing / ❔ not in CV, with evidence pointing to items in `data/cv.yml`. The agent never invents experience and does not edit your data; wording changes are suggestions.
+4. Want a tailored CV? Ask for it. The agent writes `jobs/<slug>/profile.yml` that selects and orders your projects and overrides texts such as the summary for this job (`overrides`, see AGENTS.md), then `python build.py pdf --profile jobs/<slug>/profile.yml --png` builds `out/cv_<slug>_<lang>.pdf`.
+
+See [jobs/example-energy-lead-data-engineer/](jobs/example-energy-lead-data-engineer/) for a worked example with a fictional ad. Your own `jobs/` folders are gitignored in this template; in a private repository you can track them (see `.gitignore`).
 
 ## Make it yours (after cloning)
 

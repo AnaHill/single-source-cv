@@ -22,7 +22,9 @@ data/*.yml             ← optional extra data files, merged into one namespace
 templates/cv.md.j2     ← website page (Jinja2); every templates/*.md.j2 renders to out/<name>.md
 templates/cv.typ       ← PDF template (Typst)
 templates/labels.yml   ← PDF headings + date words per language; its keys define the languages
-profiles/*.yml         ← PDF profiles: layout, filters, labels overrides, style, publish_as
+profiles/*.yml         ← PDF profiles: layout, filters, overrides, labels, style, publish_as
+jobs/<slug>/           ← job ads, fit analyses (fit.md) and tailored profiles (profile.yml)
+.claude/skills/        ← agent skills, e.g. job-fit
 assets/                ← photo (optional)
 fonts/                 ← Poppins (OFL)
 build.py               ← the generator
@@ -36,6 +38,7 @@ out/                   ← generated files (gitignored)
 python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt   # once
 python build.py md [--lang LANG]                 # website markdown (default: first language)
 python build.py pdf --profile full --lang fi [--png]
+python build.py pdf --profile jobs/<slug>/profile.yml [--png]   # profile given as a path
 python build.py all [--png] [--skip-internal]    # md + every profile × language
 python build.py list                             # profiles with descriptions
 ```
@@ -74,6 +77,16 @@ python build.py list                             # profiles with descriptions
 - `publish_as: name.pdf` copies the default-language PDF to `out/name.pdf`; `publish_as: {en: a.pdf, fi: b.pdf}` sets it per language.
 - Footer: "Updated <month year>" (build date) and page numbers when there is more than one page; both can be switched off in `style`.
 - New section: add `#let s-xxx(side) = ...`, register it in `sections`, branch on `single` if it should look different in one-column mode, and add its heading to every language in `labels.yml`.
+
+## Job fit analysis and tailored CVs
+
+When the user adds a job ad (`jobs/<slug>/ad.pdf|md|html|txt`) or asks how well they fit a position, follow `.claude/skills/job-fit/SKILL.md` (in Claude Code: `/job-fit jobs/<slug>`). In short:
+
+- Write `jobs/<slug>/fit.md`: every requirement of the ad with a status (✅ met, 🟡 partial, ❌ missing, ❔ not in CV) and evidence by item `id`, a realistic verdict, real gaps vs. things missing from the CV text only, missing ATS keywords, suggested wording (not applied), and questions.
+- Never invent experience and never edit `data/cv.yml` for a job; suggest changes in `fit.md`.
+- A tailored CV is a profile next to the ad, `jobs/<slug>/profile.yml` (`include_internal: false`), with `filters` for selection and order and `overrides` for job-specific text. Build it with `python build.py pdf --profile jobs/<slug>/profile.yml --png` → `out/cv_<slug>_<lang>.pdf`.
+- Profile `overrides`: a top-level key replaces the value (`summary_pdf: {...}`); for a top-level list, `{item_id: {field: value}}` patches those items. Override the exact key the data uses (`summary_pdf` if it exists). Overrides are applied to the raw data before resolving, so language mappings work as usual.
+- `jobs/` is gitignored in this template except `jobs/README.md` and `jobs/example-*`.
 
 ## Checks
 

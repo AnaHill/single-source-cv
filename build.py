@@ -156,6 +156,42 @@ class Resolver:
             d["period"] = str(d["period"])
 
 
+def apply_overrides(data: dict, overrides: dict) -> dict:
+    """Profile overrides on the raw data (before resolving), e.g. for a CV tailored to one job.
+
+    A top-level key replaces the value (`summary_pdf: {en: ..., fi: ...}`); for a
+    top-level list, a mapping {item_id: {field: value}} patches those items. Use the
+    exact key that the data uses (e.g. `summary_pdf`, not `summary`, if a variant exists).
+    """
+    for key, value in (overrides or {}).items():
+        if isinstance(data.get(key), list) and isinstance(value, dict):
+            by_id = {it.get("id"): it for it in data[key] if isinstance(it, dict)}
+            for item_id, fields in value.items():
+                if item_id not in by_id:
+                    sys.exit(f"error: overrides.{key}: no item with id '{item_id}'")
+                by_id[item_id].update(fields)
+        else:
+            data[key] = value
+    return data
+
+
+def find_profile(name: str) -> tuple[str, Path]:
+    """Profile by name (profiles/<name>.yml) or by path to a .yml file.
+
+    For a path, the output name is the file stem, or the folder name when the file is
+    called profile.yml (jobs/<slug>/profile.yml -> cv_<slug>_<lang>.pdf).
+    """
+    path = Path(name)
+    if path.suffix in (".yml", ".yaml"):
+        path = path.resolve()
+        label = path.parent.name if path.stem == "profile" else path.stem
+    else:
+        path, label = PROFILES_DIR / f"{name}.yml", name
+    if not path.exists():
+        sys.exit(f"error: no such profile: {path}")
+    return label, path
+
+
 def apply_filters(data: dict, filters: dict) -> dict:
     """Profile filters for top-level lists: include_tags, exclude_tags, ids, max."""
     for section, rules in (filters or {}).items():
@@ -272,15 +308,13 @@ def publish_as(profile: dict, lang: str) -> str | None:
 def build_pdf(profile_name: str, lang: str | None, png: bool = False) -> None:
     import typst
 
-    profile_path = PROFILES_DIR / f"{profile_name}.yml"
-    if not profile_path.exists():
-        sys.exit(f"error: no such profile: {profile_path}")
+    profile_name, profile_path = find_profile(profile_name)
     profile = load_yaml(profile_path)
     lang = lang or profile.get("lang", DEFAULT_LANG)
     if lang not in LANGS:
         sys.exit(f"error: language '{lang}' is not defined in templates/labels.yml")
     resolver = Resolver("pdf", lang, profile.get("include_internal", False))
-    data = resolver.resolve(load_data())
+    data = resolver.resolve(apply_overrides(load_data(), profile.get("overrides")))
     data = apply_filters(data, profile.get("filters"))
     labels = dict(LABELS[lang])
     labels.update((profile.get("labels") or {}).get(lang) or {})  # per-profile heading overrides
@@ -322,7 +356,8 @@ def build_pdf(profile_name: str, lang: str | None, png: bool = False) -> None:
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("target", choices=["md", "pdf", "all", "list"])
-    ap.add_argument("--profile", default="full", help="PDF profile name (profiles/<name>.yml)")
+    ap.add_argument("--profile", default="full",
+                    help="PDF profile name (profiles/<name>.yml) or path, e.g. jobs/<slug>/profile.yml")
     ap.add_argument("--lang", choices=LANGS,
                     help=f"language (md default: {DEFAULT_LANG}; pdf default: profile's lang)")
     ap.add_argument("--out", type=Path, default=OUT_DIR, help="output dir for markdown")

@@ -1,0 +1,32 @@
+description: Tailored for Lead Data Engineer – Example Energy Oy (fictional example)
+lang: en
+include_internal: false
+
+# Based on profiles/ats.yml: one column, applications usually go through a job portal
+layout:
+  mode: single
+  main: [header, contact, summary, skills, experience, projects, certifications, education, languages]
+
+filters:
+  projects:
+    # Most relevant first: lakehouse lead role, energy time-series, Power BI
+    ids: [industrial-lakehouse, energy-dq, retail-analytics]
+  education:
+    include_tags: [degree]
+
+# Job-specific text without touching data/cv.yml (facts from the CV only)
+overrides:
+  summary_pdf:
+    en: >-
+      Data engineer with six years of experience building Azure and Databricks data platforms, most recently as the lead engineer of a medallion lakehouse.
+      Experienced with energy-sector time-series data and data quality, and enjoys growing other engineers through mentoring and study groups.
+      Main tools are **Azure**, **Databricks** (PySpark, Delta Lake), **Python**, and **SQL**.
+
+labels:
+  en: { about: Summary, skills: Skills, projects: Key Projects }
+
+style:
+  accent: "#1d4f91"
+  font_size: 9.5
+  heading_size: 12
+  header_links: [LinkedIn, GitHub]

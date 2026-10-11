@@ -12,12 +12,17 @@
 #   - `channels: [web]` or `channels: [pdf]` limits a list item to one channel
 #     (default: all channels).
 #   - `internal: true` marks an item (or use `field_internal`) that is only
-#     rendered when the profile has `include_internal: true`.
+#     rendered when the profile has `include_internal: true`. Note: a coding
+#     agent that reads this file also reads internal data and sends it to the
+#     model provider (README: "Privacy and AI agents").
 #   - `tags:` are used by PDF profiles to filter list items.
 #   - Dates: `start` / `end` as "YYYY-MM" or "YYYY"; `end: present`.
 #     `period:` overrides the formatted date range; `date:` -> `date_fmt`.
 #   - Inline markdown (**bold**, *italic*, [text](url)) works in text fields
 #     and is converted for the PDF automatically.
+#   - `notes:` (on an item or top-level) = confirmed facts that are NOT CV text
+#     (too small, context, negatives). Never rendered; the job-fit skill reads
+#     and writes them. When a note is promoted into CV text, the note is removed.
 # =====================================================================
 
 basics:
@@ -174,6 +179,8 @@ projects:
       - Consolidated a dozen ad-hoc pipelines into one monitored, tested orchestration flow
       - Cut the nightly batch runtime from five hours to 40 minutes
     stack: [Databricks, PySpark, Delta Lake, Azure Data Factory, Azure DevOps]
+    notes:                                        # never rendered; facts for agents (job-fit)
+      - "Led two other engineers in this project (confirmed 2026-10-11)"
 
   - id: internal-bid-support
     internal: true                                # whole item only in include_internal profiles
@@ -313,3 +320,10 @@ trainings:
     start: 2025-01
     end: 2025-06
     description: A six-month internal programme on architecture practices, stakeholder work, and cost-aware cloud design.
+
+# ---------------------------------------------------------------------
+# Notes: confirmed facts that are not CV text (never rendered).
+# Read and updated by the job-fit skill; see AGENTS.md.
+# ---------------------------------------------------------------------
+notes:
+  - "No hands-on streaming experience (Kafka, Event Hubs, Structured Streaming) (confirmed 2026-10-11)"

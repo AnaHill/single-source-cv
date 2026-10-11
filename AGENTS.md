@@ -12,7 +12,7 @@ A CV kept as **one source of truth** (`data/cv.yml`, plus any other `data/*.yml`
 
 The repository ships with fictional example data (Matti Meikäläinen). The owner of a clone replaces it with their own; see README "Make it yours".
 
-**Privacy:** data may contain internal information (`internal: true`, `*_internal` fields). Never move internal content into public outputs, never add internal profiles to CI artifacts, and do not suggest making a repository with internal data public.
+**Privacy:** data may contain internal information (`internal: true`, `*_internal` fields). Never move internal content into public outputs, never add internal profiles to CI artifacts, and do not suggest making a repository with internal data public. Internal data is deliberately kept in the same file as the rest of the CV, so you will see it whenever you read `data/cv.yml` and when you open outputs of `include_internal` profiles. Read only what the task needs, do not quote internal details in chat or in files unless the task requires it, and if the user asks about privacy, point to README "Privacy and AI agents" (what you read is sent to the model provider; instructions are not a security boundary).
 
 ## Layout
 
@@ -53,6 +53,7 @@ python build.py list                             # profiles with descriptions
 - **Internal data:** `internal: true` on an item, or `field_internal` (e.g. `client_internal: Real Client Oy`), is rendered only in profiles with `include_internal: true`. Priority: `_internal` > `_web`/`_pdf` > base field. `field_internal: null` is ignored.
 - **Dates:** `start` / `end` as `"YYYY-MM"` or `YYYY`, plus `end: present`. The build adds `period` (web: `Feb 2026 - Present` if the language has `months`, else `2026/02 - Present`; PDF: `2026/02 – Present`). A hand-written `period:` wins. A single `date:` gets `date_fmt`.
 - **Tags:** `tags: [...]` on items, used by profile filters. `id:` identifies items for `filters.<list>.ids`.
+- **Notes:** `notes: [...]` on an item or as a top-level key = facts the user has confirmed that are not CV text (too small, context, or negative, e.g. "no streaming experience"). Never rendered: `notes` is in `META_KEYS`, so the resolver drops it from every output. The job-fit skill reads them and writes the user's answers into them; when a fact is promoted into CV text, the note is removed in the same edit, so the same fact never lives in two places.
 - **Inline markdown** (`**bold**`, `*italic*`, `[text](url)`, `` `code` ``) works in text fields. For the PDF the build converts it to Typst markup and escapes special characters. Relative and anchor links (`#projects`, Liquid) become plain text in the PDF.
 - `experience`: `highlights` = bullets (website), `summary` = paragraph (PDF).
 - `projects`: `title`, `client`, `role`, `industry`, `data`, `highlights` (strings, or `{text, sub: [...]}` for nested bullets), `stack`.
@@ -85,7 +86,7 @@ When the user adds a job ad (`jobs/<slug>/ad.pdf|md|html|txt`) or asks how well 
 - Write `jobs/<slug>/fit.md`: every requirement of the ad with a status (✅ met, 🟡 partial, ❌ missing, ❔ not in CV) and evidence by item `id`, a realistic verdict, real gaps vs. things missing from the CV text only, missing ATS keywords, suggested wording (not applied), and questions.
 - Never invent experience and never edit `data/cv.yml` for a job; suggest changes in `fit.md`.
 - A tailored CV is a profile next to the ad, `jobs/<slug>/profile.yml` (`include_internal: false`), with `filters` for selection and order and `overrides` for job-specific text. Build it with `python build.py pdf --profile jobs/<slug>/profile.yml --png` → `out/cv_<slug>_<lang>.pdf`.
-- Profile `overrides`: a top-level key replaces the value (`summary_pdf: {...}`); for a top-level list, `{item_id: {field: value}}` patches those items. Override the exact key the data uses (`summary_pdf` if it exists). Overrides are applied to the raw data before resolving, so language mappings work as usual.
+- Profile `overrides`: mappings are merged deeply and other values replaced, so `basics: {headline: {en: ...}}` changes only the English headline and `summary_pdf: {en: ...}` keeps the other languages; for a top-level list, `{item_id: {field: value}}` patches those items. Override the exact key the data uses (`summary_pdf` if it exists). Overrides are applied to the raw data before resolving, so language mappings work as usual.
 - `jobs/` is gitignored in this template except `jobs/README.md` and `jobs/example-*`.
 
 ## Checks

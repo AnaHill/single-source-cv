@@ -29,7 +29,8 @@ PROFILES_DIR = ROOT / "profiles"
 OUT_DIR = ROOT / "out"
 
 CHANNELS = ("web", "pdf")
-META_KEYS = {"channels", "internal"}
+# Never rendered: `notes` = confirmed facts for agents (e.g. job-fit), not CV text
+META_KEYS = {"channels", "internal", "notes"}
 # Keys whose values are never treated as inline markup in the PDF
 PLAIN_KEYS = {"id", "tags", "email", "phone", "photo", "bg", "border", "start", "end", "date", "cat",
               "period", "date_fmt"}
@@ -156,12 +157,24 @@ class Resolver:
             d["period"] = str(d["period"])
 
 
+def deep_merge(base: dict, patch: dict) -> dict:
+    """Merge `patch` into `base` in place: nested mappings are merged, anything else replaced."""
+    for key, value in patch.items():
+        if isinstance(base.get(key), dict) and isinstance(value, dict):
+            deep_merge(base[key], value)
+        else:
+            base[key] = value
+    return base
+
+
 def apply_overrides(data: dict, overrides: dict) -> dict:
     """Profile overrides on the raw data (before resolving), e.g. for a CV tailored to one job.
 
-    A top-level key replaces the value (`summary_pdf: {en: ..., fi: ...}`); for a
-    top-level list, a mapping {item_id: {field: value}} patches those items. Use the
-    exact key that the data uses (e.g. `summary_pdf`, not `summary`, if a variant exists).
+    Mappings are merged deeply and everything else is replaced, so
+    `basics: {headline: {en: ...}}` changes only the English headline and keeps the
+    other languages and basics fields. For a top-level list, a mapping
+    {item_id: {field: value}} patches those items. Use the exact key that the data
+    uses (e.g. `summary_pdf`, not `summary`, if a variant exists).
     """
     for key, value in (overrides or {}).items():
         if isinstance(data.get(key), list) and isinstance(value, dict):
@@ -169,9 +182,9 @@ def apply_overrides(data: dict, overrides: dict) -> dict:
             for item_id, fields in value.items():
                 if item_id not in by_id:
                     sys.exit(f"error: overrides.{key}: no item with id '{item_id}'")
-                by_id[item_id].update(fields)
+                deep_merge(by_id[item_id], fields)
         else:
-            data[key] = value
+            deep_merge(data, {key: value})
     return data
 
 

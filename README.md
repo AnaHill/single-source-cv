@@ -52,6 +52,24 @@ jobs/acme-senior-data-engineer/
 
 See [jobs/example-energy-lead-data-engineer/](jobs/example-energy-lead-data-engineer/) for a worked example with a fictional ad. Your own `jobs/` folders are gitignored in this template; in a private repository you can track them (see `.gitignore`).
 
+## Privacy and AI agents
+
+This repository is designed to be used with a coding agent (Claude Code, Codex …). That is convenient, but you should know what it means for your data, especially for internal information (`internal: true` items, `*_internal` fields such as real client names).
+
+**What the agent sees.** Everything in `data/cv.yml` lives in one file on purpose, so an agent that reads or edits your CV reads **all** of it, including internal fields and `notes`. The job-fit skill reads internal data deliberately, as evidence of your experience (it never copies it into anything meant for an employer). Internal data also ends up in build outputs of `include_internal` profiles: `out/_resolved_<profile>_<lang>.json`, the PDF and its PNG previews, which an agent may open when it checks a layout.
+
+**Where it goes.** Whatever the agent reads is sent to the model provider as part of the conversation and is handled under the terms of your plan and account settings (data retention, whether it may be used for training, etc.). Check them before you put information there that you are not allowed or not willing to share, for example client names covered by an NDA or your employer's policies.
+
+**What you can and cannot enforce.** Agent instructions (AGENTS.md, the skill) are guidance, not a security boundary. Claude Code permission rules in `.claude/settings.json` (e.g. `"deny": ["Read(./data/cv.yml)"]`) block the built-in file tools and commands that name the file, but not a script that opens the file itself, and they would block the whole CV file because internal data is not in a separate file. OS-level sandboxing is the real boundary but is available only on macOS, Linux and WSL2, not on native Windows. In practice: **assume an agent working in this repository can read your internal data.**
+
+**Your options, from simplest:**
+
+- **Accept it consciously.** Using an agent on internal data can be fine and useful; just make the decision knowingly, within your employer's and clients' rules.
+- **Keep the truly sensitive out of the file.** Store only what you are comfortable sharing with the model provider; leave the rest (e.g. real client names) in your company's own CV system.
+- **Keep the agent out of the repository** when internal data is present, and edit `data/cv.yml` and build internal profiles by hand.
+
+The same applies to `jobs/`: job ads are public, but your answers to the agent's questions end up in `notes` and in `fit.md`. And independent of AI: keep a repository with internal data private (see "Make it yours" below).
+
 ## Make it yours (after cloning)
 
 Use **"Use this template"** on GitHub (a fresh repository without this history), or clone and re-initialise git. Then go through this list.
@@ -61,6 +79,7 @@ Use **"Use this template"** on GitHub (a fresh repository without this history),
 - If your data will contain anything internal (real client names, `internal: true` items), **make your repository private**. The whole point of `*_internal` fields is that they live next to the public text in the same file.
 - Keep internal PDFs out of anything public. The included GitHub Action runs `build.py all --skip-internal` for this reason: workflow artifacts can be downloaded by anyone with read access.
 - Your git history keeps everything you ever committed. If you later want to publish your own repo, start a new one rather than flipping a private repo with history to public.
+- If you use a coding agent, it can read your internal data and sends what it reads to the model provider; see [Privacy and AI agents](#privacy-and-ai-agents) before adding anything sensitive.
 
 ### 2. Replace the data (`data/cv.yml`)
 

@@ -11,6 +11,8 @@ Keep your whole CV in one place (`data/cv.yml`) and generate from it:
 
 The same entry can say things differently per channel (emojis on the web, a tighter paragraph in the PDF), and profiles pick sections, order, filters, and style. The example data is a fictional *Matti Meikäläinen*.
 
+<p align="center"><img src="docs/images/workflow.png" alt="cv.yml is built by build.py into PDF CVs, a website CV and an internal CV; an AI agent compares cv.yml with a job ad into a job fit analysis and a tailored CV" width="480"></p>
+
 | Full (sidebar) | ATS (one column) | One page (fi) | Internal |
 |---|---|---|---|
 | ![Full CV](docs/images/full_en.png) | ![ATS CV](docs/images/ats_en.png) | ![One-page CV in Finnish](docs/images/one-page_fi.png) | ![Internal CV](docs/images/internal_en.png) |

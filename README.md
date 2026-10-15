@@ -45,7 +45,7 @@ jobs/acme-senior-data-engineer/
   profile.yml     ← agent, on request: a CV profile tailored to this job
 ```
 
-1. Save the ad as `jobs/<slug>/ad.pdf` (or `.md`, `.html`, `.txt`), or just paste it into the chat.
+1. Save the ad as `jobs/<slug>/ad.pdf` (or `.md`, `.html`, `.txt`), or just paste it into the chat. If the same position is already in `jobs/` (e.g. from a job portal and from the employer's own site), the agent updates that folder instead of creating a second one.
 2. In [Claude Code](https://claude.com/claude-code) run `/job-fit jobs/<slug>`. Other coding agents: "analyse jobs/<slug> as described in AGENTS.md". The instructions live in `.claude/skills/job-fit/SKILL.md`, so no API key or extra dependency is needed.
 3. Read `fit.md`. Every requirement gets ✅ met / 🟡 partial / ❌ missing / ❔ not in CV, with evidence pointing to items in `data/cv.yml`. The agent never invents experience and does not edit your data; wording changes are suggestions.
 4. Want a tailored CV? Ask for it. The agent writes `jobs/<slug>/profile.yml` that selects and orders your projects and overrides texts such as the summary for this job (`overrides`, see AGENTS.md), then `python build.py pdf --profile jobs/<slug>/profile.yml --png` builds `out/cv_<slug>_<lang>.pdf`.
@@ -85,6 +85,8 @@ Use **"Use this template"** on GitHub (a fresh repository without this history),
 
 - Replace Matti with yourself. The comments at the top of the file and [AGENTS.md](AGENTS.md) explain the conventions: languages (`{en: ..., fi: ...}`), channel variants (`summary_web` / `summary_pdf`), channel-only items (`channels: [pdf]`), internal data (`client_internal`, `internal: true`), tags and dates.
 - Keep the `id`s stable; profiles select items by `id` and `tags`.
+- **Grouping entries:** an experience item with a `positions` list renders in the PDF as one heading (e.g. "Academia 2015–2020") with the roles as sub-entries; `org` is optional. The example data has the same background twice, condensed (`academia-summary`) and detailed (`academia-detail`), and each profile picks one with `exclude_tags`. Use the same pattern for any part of your history you want to show at different lengths.
+- `basics.web.projects_url`: a page with all your projects (e.g. your website's projects section). Profiles that show only a selection can link to it.
 - More data files: every `data/*.yml` is merged into one namespace (top-level keys must be unique), e.g. `data/publications.yml`.
 
 ### 3. Photo
@@ -111,11 +113,12 @@ Use **"Use this template"** on GitHub (a fresh repository without this history),
 - `skills.chart` draws the same bubble chart on the website (Chart.js) and in the PDF (Typst). It is a personal touch, not a necessity.
 - **Bubbles are positioned by hand**: `x`, `y` on a 0–100 grid, `r` = radius in px of a 620 px wide chart. Nothing prevents overlaps, so expect a few rounds of edit → `--png` → look.
 - Bubble sizes read as skill levels, so choose them deliberately, or leave the chart out: delete `skills.chart` and remove `skills_chart` from the profiles. The website template skips the chart when it is missing.
-- `style.chart_scale` (e.g. `0.8`) shrinks it in a profile.
+- `style.chart_scale` (e.g. `0.8`) shrinks it in a profile. `style.chart_bubble_scale` (e.g. `1.1`) and `style.chart_height` (height / width, default `0.52`) tighten the PDF chart without touching the coordinates the website chart also uses.
 
 ### 7. Profiles (`profiles/*.yml`)
 
-- Included: `full` (sidebar, key projects, chart), `one-page`, `ats` (one column, conventional headings), `projects` (all public projects), `internal` (real client names; do not publish).
+- Included: `full` (sidebar, selected projects, chart, condensed academia), `one-page` (condensed academia and a link to all projects), `ats` (one column, conventional headings, detailed academia), `projects` (all public projects), `internal` (real client names; do not publish).
+- Profiles that show only some projects (`full`, `ats`) title them "Selected Projects" (a `labels` override) and add a link to the full list with `style.show_projects_link: true`. The `projects_link` section shows just that heading and link, for a profile without projects (`one-page`).
 - A profile sets `layout` (`mode: sidebar | single`, section order), `filters` (`ids`, `include_tags`, `exclude_tags`, `max`), `labels` overrides (e.g. "Summary" instead of "About Me"), `style`, and optionally `publish_as` (see below). Add or delete profiles freely; `build.py all` builds whatever is there.
 - `publish_as: resume.pdf` also writes the default-language PDF as `out/resume.pdf`, i.e. with the file name your website links to. Then publishing is always "copy the same files".
 

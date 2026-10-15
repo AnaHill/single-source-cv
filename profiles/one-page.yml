@@ -1,14 +1,14 @@
-description: Compact 1-page CV with sidebar (industry experience + degrees only)
+description: Compact 1-page CV with sidebar (condensed academia, link to projects, degrees only)
 lang: en
 include_internal: false
 
 layout:
   sidebar: [photo, contact, skills, certifications]
-  main: [header, summary, experience, education, languages]
+  main: [header, summary, experience, projects_link, education, languages]   # projects_link: heading + link to the full list
 
 filters:
   experience:
-    exclude_tags: [academia]
+    exclude_tags: [academia-detail]   # condensed "Academia" entry only
   education:
     include_tags: [degree]
 

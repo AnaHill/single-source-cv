@@ -1,6 +1,7 @@
 .venv/
 out/
 __pycache__/
+# temp.md
 
 # Job applications are personal: keep only the README and the worked example.
 # In a private repository you may delete these three lines to track your applications.

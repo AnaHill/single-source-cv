@@ -6,12 +6,13 @@ lang: en
 include_internal: false
 
 layout:
-  sidebar: [photo, contact, skills, languages, certifications]
-  main: [header, summary, experience, projects, education]
+  # education in the sidebar: uses the sidebar's free space instead of spilling the main column to a new page
+  sidebar: [photo, contact, skills, languages, certifications, education]
+  main: [header, summary, experience, projects]
 
 filters:
   experience:
-    exclude_tags: [academia]
+    exclude_tags: [academia-detail]   # condensed "Academia" entry only
   education:
     include_tags: [degree]
 

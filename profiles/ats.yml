@@ -8,18 +8,21 @@ layout:
   main: [header, contact, summary, skills, experience, projects, education, certifications, languages]
 
 filters:
+  experience:
+    exclude_tags: [academia-summary]   # the detailed academia entry
   projects:
-    ids: [industrial-lakehouse, energy-dq, retail-analytics]
+    ids: [industrial-lakehouse, energy-dq, retail-analytics]   # same selection as full
   education:
     include_tags: [degree]
 
 # Conventional headings that applicant tracking systems recognise
 labels:
-  en: { about: Summary, skills: Skills, projects: Key Projects }
-  fi: { about: Profiili, projects: Keskeiset projektit }
+  en: { about: Summary, skills: Skills, projects: Selected Projects }
+  fi: { about: Profiili, projects: Valikoidut projektit }
 
 style:
   accent: "#1d4f91"
   font_size: 9.5
   heading_size: 12
   header_links: [LinkedIn, GitHub]   # which basics.links (by label) go under the name
+  show_projects_link: true           # link to the full project list after "Selected Projects"

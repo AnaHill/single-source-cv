@@ -1,4 +1,4 @@
-description: Full CV with sidebar (photo, contact, skills), key projects, skills chart and merits
+description: Full CV with sidebar (photo, contact, skills), selected projects, skills chart, condensed academia and merits
 lang: en
 include_internal: false
 # Optional: also write the default-language PDF as out/<name>, e.g. the file
@@ -7,19 +7,30 @@ publish_as: resume.pdf
 
 # layout.mode: sidebar (default) or single. Section order per column. Available sections:
 #   photo, header, summary, contact, skills, skills_chart, experience,
-#   projects, education, languages, certifications, merits, trainings
+#   projects, projects_link, education, languages, certifications, merits, trainings
 layout:
   sidebar: [photo, contact, skills, languages, certifications]
   main: [header, summary, experience, skills_chart, projects, education, merits, trainings]
 
 # Filters for top-level lists: include_tags, exclude_tags, ids (explicit selection + order), max
 filters:
+  experience:
+    exclude_tags: [academia-detail]   # condensed "Academia" entry with sub-positions
   projects:
     ids: [industrial-lakehouse, energy-dq, retail-analytics]
 
+# Only a selection of projects here -> say so, and link to the full list (basics.web.projects_url)
+labels:
+  en: { projects: Selected Projects }
+  fi: { projects: Valikoidut projektit }
+
 # Optional style overrides (defaults at the top of templates/cv.typ):
 #   accent, ink, font, font_size, heading_size, sidebar_width (%), photo_size (cm),
-#   justify, chart_scale, show_references, show_updated, show_page_numbers
+#   justify, chart_scale, chart_bubble_scale, chart_height, show_references,
+#   show_projects_link, show_updated, show_page_numbers
 style:
   accent: "#1d4f91"
-  chart_scale: 0.8
+  chart_scale: 1.0
+  chart_bubble_scale: 1.1    # PDF only: bigger bubbles ...
+  chart_height: 0.48         # ... in a slightly lower chart = less empty space between bubbles
+  show_projects_link: true   # "All projects on my website: ..." after Selected Projects

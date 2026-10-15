@@ -17,6 +17,7 @@ jobs/<slug>/            slug = company-role, lowercase with hyphens, e.g. exampl
   profile.yml           tailored CV profile (only when the user asks for a tailored CV)
 ```
 
+- **Check for duplicates first.** Before creating a new folder, look through the existing `jobs/*/ad.*` files for the same company and role. The same position often appears in several places, e.g. a job portal and the employer's own application form. If you find a match, do not create a second folder: add the new source and any wording differences to the existing `ad.md`, update that `fit.md` (a re-run, see Rules), and tell the user which folder you used.
 - If the user pastes the ad text into the chat, save it as `jobs/<slug>/ad.md` first, with the source (URL or "pasted") and today's date at the top.
 - If the user gives only a URL, fetch it if you can and save the readable text as `ad.md`; if fetching fails, ask the user to paste the text or save the page.
 - If the argument is a file instead of a folder, use its folder; if the file is not in `jobs/`, create `jobs/<slug>/` and copy it there.

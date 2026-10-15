@@ -37,6 +37,10 @@
 #let show-page-numbers = st("show_page_numbers", true)
 #let show-references = st("show_references", false)
 #let chart-scale = st("chart_scale", 1.0)
+// PDF-only chart tuning (the data coordinates are shared with the website chart):
+// bigger bubbles and a lower chart close the gaps between bubbles
+#let chart-bubble = st("chart_bubble_scale", 1.0)
+#let chart-height = st("chart_height", 0.52)   // height / width
 // secondary text (dates, meta lines); sidebar text sits on the accent colour
 #let muted(side) = if side { rgb(255, 255, 255, 215) } else { luma(105) }
 
@@ -84,8 +88,9 @@
 
 // Entry title on the left, date (`when`) right-aligned on the same line.
 // A long title wraps inside its own column so the date stays at the right edge.
-#let entry-head(title, when: none, side: false) = block(below: 0.45em, sticky: true, {
-  let t = text(weight: "bold", size: base-size * 1.08, title)
+// `sub: true` = lighter head for a sub-position under a grouping entry.
+#let entry-head(title, when: none, side: false, sub: false) = block(below: if sub { 0.35em } else { 0.45em }, sticky: true, {
+  let t = if sub { text(weight: "semibold", size: base-size, title) } else { text(weight: "bold", size: base-size * 1.08, title) }
   if when in (none, "") { t } else {
     grid(
       columns: (1fr, auto), column-gutter: 0.9em, align: (left + top, right + top),
@@ -171,16 +176,16 @@
   block(above: 1em, below: 1em, layout(size => {
     let w = size.width * chart-scale
     let s = w / 620pt * 0.95  // chart.js px -> pt scale
-    let h = w * 0.52
+    let h = w * chart-height
     let inner = 24pt * s
     align(center, box(width: w, height: h, {
       for it in ch.items {
         let c = cats.at(it.cat)
-        let rr = it.r * s * 1pt
+        let rr = it.r * s * chart-bubble * 1pt
         let cx = inner + (w - 2 * inner) * it.x / 100
         let cy = inner + (h - 2 * inner) * (1 - it.y / 100)
         place(dx: cx - rr, dy: cy - rr, circle(radius: rr, fill: css-color(c.bg), stroke: 1.2pt + css-color(c.border)))
-        let fs = calc.max(9, calc.round(it.r * 0.27)) * s * 1pt
+        let fs = calc.max(9, calc.round(it.r * 0.27)) * s * chart-bubble * 1pt
         place(dx: cx - rr, dy: cy - rr, box(width: 2 * rr, height: 2 * rr,
           align(center + horizon, text(fill: white, weight: "bold", size: fs,
             it.label.split("\n").map(m).join(linebreak())))))
@@ -196,13 +201,27 @@
 
 #let s-experience(side) = if has(cv, "experience") {
   sec-head(L.experience, side)
+  let head(x) = if has(x, "org") [#m(x.title), #m(x.org)] else { m(x.title) }
   for x in cv.experience {
     block(breakable: false, below: 1.0em, {
-      entry-head([#m(x.title), #m(x.org)], when: x.at("period", default: none), side: side)
+      entry-head(head(x), when: x.at("period", default: none), side: side)
       if has(x, "summary") { m(x.summary) }
       else if has(x, "highlights") { list(..x.highlights.map(m)) }
+      // grouping entry (e.g. Academia): sub-positions with their own title, period and summary
+      for p in x.at("positions", default: ()) {
+        block(above: 0.5em, below: 0.6em, {
+          entry-head(head(p), when: p.at("period", default: none), side: side, sub: true)
+          if has(p, "summary") { m(p.summary) }
+        })
+      }
     })
   }
+}
+
+// "All projects on my website: <url>" (basics.web.projects_url); none if no URL
+#let projects-link() = if has(cv.basics, "web") and has(cv.basics.web, "projects_url") {
+  let u = cv.basics.web.projects_url
+  text(size: base-size * 0.95, [#L.projects_more #link(u, short-url(u))])
 }
 
 #let s-projects(side) = if has(cv, "projects") {
@@ -221,6 +240,14 @@
       }
     })
   }
+  // style.show_projects_link: point to the full project list
+  if st("show_projects_link", false) { block(above: 0.2em, projects-link()) }
+}
+
+// Projects heading with only the link, for profiles that list no projects (e.g. one-page)
+#let s-projects-link(side) = if has(cv.basics, "web") and has(cv.basics.web, "projects_url") {
+  sec-head(L.projects, side)
+  projects-link()
 }
 
 #let s-education(side) = if has(cv, "education") {
@@ -299,7 +326,7 @@
 #let sections = (
   photo: s-photo, header: s-header, summary: s-summary, contact: s-contact,
   skills: s-skills, skills_chart: s-skills-chart, experience: s-experience,
-  projects: s-projects, education: s-education, languages: s-languages,
+  projects: s-projects, projects_link: s-projects-link, education: s-education, languages: s-languages,
   certifications: s-certifications, merits: s-merits, trainings: s-trainings,
 )
 

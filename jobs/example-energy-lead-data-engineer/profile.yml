@@ -8,6 +8,8 @@ layout:
   main: [header, contact, summary, skills, experience, projects, certifications, education, languages]
 
 filters:
+  experience:
+    exclude_tags: [academia-summary]   # detailed academia entry, as in ats
   projects:
     # Most relevant first: lakehouse lead role, energy time-series, Power BI
     ids: [industrial-lakehouse, energy-dq, retail-analytics]
@@ -23,7 +25,7 @@ overrides:
       Main tools are **Azure**, **Databricks** (PySpark, Delta Lake), **Python**, and **SQL**.
 
 labels:
-  en: { about: Summary, skills: Skills, projects: Key Projects }
+  en: { about: Summary, skills: Skills, projects: Selected Projects }
 
 style:
   accent: "#1d4f91"

@@ -52,6 +52,7 @@ basics:
       url: https://www.example.com/matti
   web:
     credly_url: https://www.example.com/credly/matti   # shown under Certifications (optional)
+    projects_url: https://www.example.com/matti#projects   # PDF: "All projects on my website" link (style.show_projects_link, section projects_link)
 
 # Website and PDF say the same thing in a different tone (emojis only on the web)
 summary_web: >-
@@ -143,6 +144,41 @@ experience:
       en: Built and maintained ELT pipelines for public sector and energy customers with Azure Data Factory, PostgreSQL, and Python. Introduced automated data quality tests that caught issues before they reached reports.
       fi: Rakensin ja ylläpidin ELT-putkia julkisen sektorin ja energia-alan asiakkaille (Azure Data Factory, PostgreSQL, Python). Toin käyttöön automaattiset datan laatutestit, jotka löysivät virheet ennen raportteja.
 
+  # Two versions of the same background; profiles pick one with exclude_tags:
+  #   academia-summary: one grouping entry with sub-positions (`positions`, PDF only)
+  #   academia-detail:  the regular, detailed entry (website + ats profile)
+  - id: academia-summary
+    channels: [pdf]
+    title:
+      en: Academia
+      fi: Akatemia
+    start: 2015
+    end: 2020
+    tags: [academia, academia-summary]
+    positions:                                    # rendered as sub-entries; `org` is optional
+      - title:
+          en: Research Assistant
+          fi: Tutkimusavustaja
+        org:
+          en: Example University of Technology
+          fi: Esimerkin teknillinen yliopisto
+        start: 2017-09
+        end: 2020-02
+        summary:
+          en: Analysed sensor data from industrial processes with Python and MATLAB, and co-authored two conference papers.
+          fi: Analysoin teollisten prosessien anturidataa Pythonilla ja MATLABilla, ja olin mukana kirjoittamassa kahta konferenssijulkaisua.
+      - title:
+          en: Summer Trainee
+          fi: Kesäharjoittelija
+        org:
+          en: Example University of Technology
+          fi: Esimerkin teknillinen yliopisto
+        start: 2015-06
+        end: 2016-08
+        summary:
+          en: Collected and reported process measurement data for the same research group.
+          fi: Keräsin ja raportoin prosessien mittausdataa samalle tutkimusryhmälle.
+
   - id: university-ra
     title:
       en: Research Assistant
@@ -152,7 +188,7 @@ experience:
       fi: Esimerkin teknillinen yliopisto
     start: 2017-09
     end: 2020-02
-    tags: [academia]
+    tags: [academia, academia-detail]
     highlights:
       - Analysed sensor data from industrial processes with **Python** and **MATLAB**
     summary:
